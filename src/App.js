@@ -6,8 +6,9 @@ function App() {
 
 const [facebookData, setFacebookData] = useState([])
 const [twitterData, setTwitterData] = useState([])
-const [snachatData, setSnapchatData] = useState([])
+const [snapchatData, setSnapchatData] = useState([])
 const [googleAnalyticsData, setGoogleAnalyticsData] = useState([])
+const [search, setSearch] = useState("")
 
 useEffect(() => {
   fetch('http://localhost:3000/fakeDataSet')
@@ -20,11 +21,64 @@ useEffect(() => {
   })
 }, [])
 
+function handleSearch(newSearch) {
+  setSearch(newSearch)
+}
+
+const searchedFacebookData = facebookData.filter((facebookCampaign) => {
+  if (search === "") {
+    return true;
+  } else {
+    return facebookCampaign.campaign_name.toLowerCase().includes(search.toLowerCase())  
+  }
+})
+
+const searchedTwitterData = twitterData.filter((twitterCampaign) => {
+  if (search === "") {
+    return true;
+  } else {
+    return twitterCampaign.campaign.toLowerCase().includes(search.toLowerCase())
+  }
+})
+
+const searchedSnapchatData = snapchatData.filter((snapchatCampaign) => {
+  if (search === "") {
+    return true;
+  } else {
+    return snapchatCampaign.campaign_name.toLowerCase().includes(search.toLowerCase())
+  }
+})
+
+const searchedGoogleAnalyticsData = googleAnalyticsData.filter((googleAnalyticsCampaign) => {
+  if (search === "") {
+    return true;
+  } else {
+    return googleAnalyticsCampaign.utm_campaign.toLowerCase().includes(search.toLowerCase())
+  }
+})
+
   return (
     <div className="App">
       <h1>Blueprint Software Engineer Apprentice Challenge</h1>
+      <div className='searchAndFilterContainer'>
+        <h2>Search & Filter Campaign Info</h2>
+        <div className='campaignSearch'>
+          <input 
+              value={search}
+              onChange={(e) => handleSearch(e.target.value)}
+              type="text"
+              placeholder="Search by campaign name..."
+          ></input>
+        </div>
+        <div>
+          <input
+            placeholder="TEST TEST"
+          ></input>
+        </div>
+      </div>
+      
      <div>
-      <CardContainer facebookData={facebookData} twitterData={twitterData} snachatData={snachatData} googleAnalyticsData={googleAnalyticsData}/>
+        <CardContainer facebookData={searchedFacebookData} twitterData={searchedTwitterData} snachatData={searchedSnapchatData} googleAnalyticsData={searchedGoogleAnalyticsData}/>
      </div>
     </div>
   );
