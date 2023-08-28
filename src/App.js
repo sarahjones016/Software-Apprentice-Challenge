@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect} from 'react';
+import CardContainer from './CardContainer'
 
 function App() {
+
+const [facebookData, setFacebookData] = useState([])
+const [twitterData, setTwitterData] = useState([])
+const [snachatData, setSnapchatData] = useState([])
+const [googleAnalyticsData, setGoogleAnalyticsData] = useState([])
+
+useEffect(() => {
+  fetch('http://localhost:3000/fakeDataSet')
+  .then(resp => resp.json())
+  .then((data) => {
+    setFacebookData(data.facebook_ads)
+    setTwitterData(data.twitter_ads)
+    setSnapchatData(data.snapchat_ads)
+    setGoogleAnalyticsData(data.google_analytics)
+  })
+}, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Blueprint Software Engineer Apprentice Challenge</h1>
+     <div>
+      <CardContainer facebookData={facebookData} twitterData={twitterData} snachatData={snachatData} googleAnalyticsData={googleAnalyticsData}/>
+     </div>
     </div>
   );
 }
