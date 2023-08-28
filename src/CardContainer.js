@@ -6,7 +6,6 @@ import GoogleAnalyticsCard from './GoogleAnalyticsCard'
 
 function CardContainer({facebookData, twitterData, snachatData, googleAnalyticsData}) {
 
-
   return (
     <div>
       <div className='cardContainer'>
