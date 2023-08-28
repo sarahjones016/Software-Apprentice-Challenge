@@ -71,9 +71,11 @@ const searchedGoogleAnalyticsData = googleAnalyticsData.filter((googleAnalyticsC
           ></input>
         </div>
         <div>
-          <input
-            placeholder="TEST TEST"
-          ></input>
+          <select>
+            <option>Sort By Spend</option>
+            <option>Ascending: Smallest To Largest</option>
+            <option>Descending: Largest To Smallest</option>
+          </select>
         </div>
       </div>
       
