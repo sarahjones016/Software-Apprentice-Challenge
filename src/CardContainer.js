@@ -1,47 +1,36 @@
 import React, {useState} from 'react'
-import FacebookCard from './FacebookCard'
-import TwitterCard from './TwitterCard'
-import SnapchatCard from './SnapchatCard'
-import GoogleAnalyticsCard from './GoogleAnalyticsCard'
+import GeneralCard from './GeneralCard'
 
 function CardContainer({allPlatformData}) {
 
 const [search, setSearch] = useState("")
+const [sortValue, setSortValue] = useState("")
+
+const combinedArrays = []
+
+allPlatformData.google_analytics?.map((googleAnalyticsCampaign) => {
+  return combinedArrays.push(googleAnalyticsCampaign)
+})
+allPlatformData.facebook_ads?.map((facebookCampaign) => {
+  return combinedArrays.push(facebookCampaign)
+})
+allPlatformData.twitter_ads?.map((twitterCampaign) => {
+  return combinedArrays.push(twitterCampaign)
+})
+allPlatformData.snapchat_ads?.map((snapchatCampaign) => {
+  return combinedArrays.push(snapchatCampaign)
+})
 
 function handleSearch(newSearch) {
   setSearch(newSearch)
 }
 
-const searchedFacebookData = allPlatformData.facebook_ads?.filter((facebookCampaign) => {
+const searchedData = combinedArrays.filter((campaign) => {
   if (search === "") {
-    return true;
-  } else {
-    return facebookCampaign.campaign_name.toLowerCase().includes(search.toLowerCase())  
-  }
-})
-
-const searchedTwitterData = allPlatformData.twitter_ads?.filter((twitterCampaign) => {
-  if (search === "") {
-    return true;
-  } else {
-    return twitterCampaign.campaign.toLowerCase().includes(search.toLowerCase())
-  }
-})
-
-const searchedSnapchatData = allPlatformData.snapchat_ads?.filter((snapchatCampaign) => {
-  if (search === "") {
-    return true;
-  } else {
-    return snapchatCampaign.campaign_name.toLowerCase().includes(search.toLowerCase())
-  }
-})
-
-const searchedGoogleAnalyticsData = allPlatformData.google_analytics?.filter((googleAnalyticsCampaign) => {
-  if (search === "") {
-    return true;
-  } else {
-    return googleAnalyticsCampaign.utm_campaign.toLowerCase().includes(search.toLowerCase())
-  }
+      return true;
+    } else {
+      return (campaign.campaign_name || campaign.campaign || campaign.utm_campaign).toLowerCase().includes(search.toLowerCase())  
+    }
 })
 
   return (
@@ -57,26 +46,23 @@ const searchedGoogleAnalyticsData = allPlatformData.google_analytics?.filter((go
           ></input>
         </div>
         <div>
-          <select>
-            <option>Sort By Spend</option>
-            <option>Ascending: Smallest To Largest</option>
-            <option>Descending: Largest To Smallest</option>
+          <select
+            value={sortValue}
+            onChange={(e) => setSortValue(e.target.value)}
+          >
+            <option value="">Sort By Spend</option>
+            <option value="(a.spend || a.cost) > (b.spend || a.cost)">Ascending: Smallest To Largest</option>
+            <option value="(b.spend || b.cost) > (a.spend || a.cost)">Descending: Largest To Smallest</option>
           </select>
         </div>
       </div>
       <div className='cardContainer'>
-        {searchedFacebookData?.map((facebookCampaign) => {
-            return <FacebookCard facebookCampaign={facebookCampaign}/>
-        })}
-        {searchedTwitterData?.map((twitterCampaign) => {
-            return <TwitterCard twitterCampaign={twitterCampaign}/>
-        })}
-        {searchedSnapchatData?.map((snapchatCampaign) => {
-            return <SnapchatCard snapchatCampaign={snapchatCampaign}/>
-        })}
-        {searchedGoogleAnalyticsData?.map((googleAnalyticsCampaign) => {
-            return <GoogleAnalyticsCard googleAnalyticsCampaign={googleAnalyticsCampaign}/>
-        })}
+        {searchedData
+          .sort((a, b) => (eval(sortValue) ? 1 : -1))
+          .map((individualCampaign) => {
+            return <GeneralCard individualCampaign={individualCampaign}/>
+        })
+       }
       </div>
     </div>
   )
