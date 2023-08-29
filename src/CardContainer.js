@@ -1,16 +1,13 @@
 import React, {useState} from 'react'
 import GeneralCard from './GeneralCard'
 
-function CardContainer({allPlatformData}) {
+function CardContainer({allPlatformData, googleAnalyticsData}) {
 
 const [search, setSearch] = useState("")
 const [sortValue, setSortValue] = useState("")
 
 const combinedArrays = []
 
-allPlatformData.google_analytics?.map((googleAnalyticsCampaign) => {
-  return combinedArrays.push(googleAnalyticsCampaign)
-})
 allPlatformData.facebook_ads?.map((facebookCampaign) => {
   return combinedArrays.push(facebookCampaign)
 })
@@ -29,7 +26,7 @@ const searchedData = combinedArrays.filter((campaign) => {
   if (search === "") {
       return true;
     } else {
-      return (campaign.campaign_name || campaign.campaign || campaign.utm_campaign).toLowerCase().includes(search.toLowerCase())  
+      return (campaign.campaign_name || campaign.campaign).toLowerCase().includes(search.toLowerCase())  
     }
 })
 
@@ -60,7 +57,7 @@ const searchedData = combinedArrays.filter((campaign) => {
         {searchedData
           .sort((a, b) => (eval(sortValue) ? 1 : -1))
           .map((individualCampaign) => {
-            return <GeneralCard individualCampaign={individualCampaign}/>
+              return <GeneralCard individualCampaign={individualCampaign} googleAnalyticsData={googleAnalyticsData}/>
         })
        }
       </div>
