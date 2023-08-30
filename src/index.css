@@ -68,4 +68,27 @@ select {
   border-color: rgba(66, 9, 234, 0.25);
 }
 
+/* tablet */
+@media all and (max-width: 991px) {
+
+      
+  }
+  
+/* phone */
+@media all and (max-width: 767px) {
+
+  h1 {
+    font-size: 32px;
+  }
+
+  input {
+    width: 250px;
+  }
+  
+  select {
+    width: 250px;
+  }
+  
+}
+
 
